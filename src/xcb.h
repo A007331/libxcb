@@ -29,11 +29,7 @@
 #define __XCB_H__
 #include <sys/types.h>
 
-#if defined(__solaris__)
-#include <inttypes.h>
-#else
 #include <stdint.h>
-#endif
 
 #ifndef _WIN32
 #include <sys/uio.h>
