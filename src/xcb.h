@@ -47,7 +47,11 @@ extern "C" {
  * @file xcb.h
  */
 
-#ifdef __GNUC__
+#ifndef __has_attribute
+# define __has_attribute(x) 0  /* Compatibility with older compilers. */
+#endif
+
+#if defined(__GNUC__) ||  __has_attribute(__packed__)
 #define XCB_PACKED __attribute__((__packed__))
 #else
 #define XCB_PACKED
