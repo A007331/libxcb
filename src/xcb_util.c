@@ -104,7 +104,9 @@ static int _xcb_parse_display_path_to_socket(const char *name, char **host, char
                                              int *displayp, int *screenp)
 {
     struct stat sbuf;
-    char path[PATH_MAX];
+    /* In addition to the AF_UNIX path, there may be a screen number.
+     * The trailing \0 is already accounted in the size of sun_path. */
+    char path[sizeof(((struct sockaddr_un*)0)->sun_path) + 1 + 10];
     size_t len;
     int _screen = 0, res;
 
