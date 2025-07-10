@@ -5,6 +5,11 @@ EXTSOURCES =	xproto.c \
 		xc_misc.c
 
 AM_CFLAGS = $(BASE_CFLAGS) $(NEEDED_CFLAGS) $(XDMCP_CFLAGS)
+
+if XCB_HAVE_LOCAL_NO_TCP
+AM_CFLAGS += -DXCB_HAVE_LOCAL_NO_TCP
+endif
+
 libxcb_la_LIBADD = $(NEEDED_LIBS) $(XDMCP_LIBS)
 libxcb_la_SOURCES = \
 		xcb_conn.c xcb_out.c xcb_in.c xcb_ext.c xcb_xid.c \

@@ -215,7 +215,9 @@ int xcb_parse_display(const char *name, char **host, int *displayp,
     return _xcb_parse_display(name, host, NULL, displayp, screenp);
 }
 
+#ifndef XCB_HAVE_LOCAL_NO_TCP
 static int _xcb_open_tcp(const char *host, char *protocol, const unsigned short port);
+#endif
 #ifndef _WIN32
 static int _xcb_open_unix(char *protocol, const char *file);
 #endif /* !WIN32 */
@@ -241,8 +243,12 @@ static int _xcb_open(const char *host, char *protocol, const int display)
         (*host != '\0') && (strcmp("unix",host) != 0))
     {
         /* display specifies TCP */
+#ifndef XCB_HAVE_LOCAL_NO_TCP
         unsigned short port = X_TCP_PORT + display;
         return _xcb_open_tcp(host, protocol, port);
+#else
+        return -1;
+#endif
     }
 
 #ifndef _WIN32
@@ -300,8 +306,12 @@ static int _xcb_open(const char *host, char *protocol, const int display)
     free(file);
 
     if (fd < 0 && !protocol && *host == '\0') {
+#ifndef XCB_HAVE_LOCAL_NO_TCP
             unsigned short port = X_TCP_PORT + display;
             fd = _xcb_open_tcp(host, protocol, port);
+#else
+			return -1;
+#endif
     }
 
     return fd;
@@ -340,6 +350,7 @@ static int _xcb_do_connect(int fd, const struct sockaddr* addr, int addrlen) {
     return connect(fd, addr, addrlen);
 }
 
+#ifndef XCB_HAVE_LOCAL_NO_TCP
 static int _xcb_open_tcp(const char *host, char *protocol, const unsigned short port)
 {
     int fd = -1;
@@ -424,6 +435,7 @@ static int _xcb_open_tcp(const char *host, char *protocol, const unsigned short 
     }
 #endif
 }
+#endif // #ifndef XCB_HAVE_LOCAL_NO_TCP
 
 #ifndef _WIN32
 static int _xcb_open_unix(char *protocol, const char *file)
