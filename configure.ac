@@ -187,6 +187,11 @@ XCB_CHECK_VISIBILITY()
 
 AC_CHECK_FUNC(getaddrinfo, [AC_DEFINE(HAVE_GETADDRINFO, 1, [getaddrinfo() function is available])], )
 
+AC_ARG_ENABLE([local-no-tcp],
+        AS_HELP_STRING([--enable-local-no-tcp], [enable local mode without TCP and getaddrinfo (CAUTION) (default: no)]),
+        [enable_local_no_tcp=$enableval], [enable_local_no_tcp=no])
+AM_CONDITIONAL([XCB_HAVE_LOCAL_NO_TCP], [test "x$enable_local_no_tcp" = "xyes"])
+
 case $host_os in
         # darwin through Snow Leopard has poll() but can't be used to poll character devices.
         darwin@<:@789@:>@*|darwin10*) ;;
