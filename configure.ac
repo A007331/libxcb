@@ -91,6 +91,11 @@ XCBPROTO_XCBPYTHONDIR=`$PKG_CONFIG --variable=pythondir xcb-proto`
 AC_MSG_RESULT($XCBPROTO_XCBPYTHONDIR)
 AC_SUBST(XCBPROTO_XCBPYTHONDIR)
 
+AC_ARG_ENABLE([local-no-tcp],
+	AS_HELP_STRING([--enable-local-no-tcp], [enable local mode without TCP and getaddrinfo (CAUTION) (default: no)]),
+	[enable_local_no_tcp=$enableval], [enable_local_no_tcp=no])
+AM_CONDITIONAL([XCB_HAVE_LOCAL_NO_TCP], [test "x$enable_local_no_tcp" = "xyes"])
+
 AC_SEARCH_LIBS(getaddrinfo, socket)
 AC_SEARCH_LIBS(connect, socket)
 
